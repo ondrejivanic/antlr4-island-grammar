@@ -27,13 +27,13 @@ In our example rows have different structure thus some lexical tokens might not 
 
 In lexer, islands are identified by modes. Token can trigger mode change using `mode`, `pushMode` and `popMode` commands.
 
-```
+```g4
 HEADER: 'H;' -> pushMode(Mode_Header);
 ```
 
 In some situations tokens can be re-used:
 
-```
+```g4
 lexer grammar CSVLexer;
 
 // Global tokens
@@ -53,3 +53,5 @@ In parser token `NL` can be referred as `NL` (perhaps preferred), `Mode_1_NL` an
 - `Mode_1_TAG: TAG -> type(TAG);`
 - `MY_TAG: TAG -> type(TAG);`
 - `OTHER_NAME: TAG -> type(TAG);`
+
+# Final lexer and parser
