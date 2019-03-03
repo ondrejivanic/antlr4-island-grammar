@@ -120,7 +120,8 @@ comment: COMMENT;
   (header H; (timestamp 2019/1/10) \n)
   (meta # (comment  this is comment) \n)
   (data D ; (value Value1) ; na ; (value Value3) \n)
-  (meta # (comment  this is comment 2) \n) (data D ; (value Value1) \n)
+  (meta # (comment  this is comment 2) \n)
+  (data D ; (value Value1) \n)
   (trailer T ; (d_records 6) ; (m_records 2) \n)
 <EOF>)
 ```
