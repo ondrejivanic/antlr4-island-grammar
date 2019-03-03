@@ -17,15 +17,15 @@ D;Value1
 T;6;2
 ```
 
-Rows are idetified with `H`; `T`; `D` and `#` for header; trailer; data and comment row respectively.
+Rows are identified with `H`; `T`; `D` and `#` for header; trailer; data and comment row respectively.
 
-## Gammar without islands
+## Grammar without islands
 
 In our example rows have different structure thus some lexical tokens might not be applicable. For example, tokens identifying  row types might be issued by lexer when parsing field values inside "data" rows.
 
 ## Islands
 
-In lexer, islands are identified by modes. Token can triger mode change using `mode`, `pushMode` and `popMode` commands.
+In lexer, islands are identified by modes. Token can trigger mode change using `mode`, `pushMode` and `popMode` commands.
 
 ```
 HEADER: 'H;' -> pushMode(Mode_Header);
@@ -48,7 +48,7 @@ Mode_2_NL: NL -> type(NL)
 Mode_2_DELIM: DELIM -> type(DELIM)
 ```
 
-In parser token `NL` can be refered as `NL` (perhaps preferred), `Mode_1_NL` and `Mode_2_NL`. In "mode" tag names or prefixes can be arbitrary:
+In parser token `NL` can be referred as `NL` (perhaps preferred), `Mode_1_NL` and `Mode_2_NL`. In "mode" tag names or prefixes can be arbitrary:
 
 - `Mode_1_TAG: TAG -> type(TAG);`
 - `MY_TAG: TAG -> type(TAG);`
