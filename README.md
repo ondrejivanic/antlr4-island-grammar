@@ -55,3 +55,72 @@ In parser token `NL` can be referred as `NL` (perhaps preferred), `Mode_1_NL` an
 - `OTHER_NAME: TAG -> type(TAG);`
 
 # Final lexer and parser
+
+@[CSVLexer.g4](CSVLexer.g4)
+```g4
+lexer grammar CSVLexer;
+
+HEADER: 'H;' -> pushMode(Mode_Header);
+TRAILER: 'T' -> pushMode(Mode_Trailer);
+DATA: 'D' -> pushMode(Mode_Data);
+META: '#' -> pushMode(Mode_Meta);
+
+X: ';';
+NL: '\r'? '\n';
+
+fragment DIGIT: [0-9];
+fragment DT_SEP: '/';
+
+mode Mode_Header;
+Mode_Header_NL: NL -> type(NL), popMode;
+TS: DIGIT DIGIT DIGIT DIGIT DT_SEP DIGIT? DIGIT DT_SEP DIGIT? DIGIT;
+
+mode Mode_Trailer;
+Mode_Trailer_X: X -> type(X);
+Mode_Trailer_NL: NL -> type(NL), popMode;
+NUMBER: DIGIT+;
+
+mode Mode_Data;
+Mode_Data_X: X -> type(X);
+Mode_Data_NL: NL -> type(NL), popMode;
+TEXT: ~[;\n\r]+;
+
+mode Mode_Meta;
+Mode_Meta_NL: NL -> type(NL), popMode;
+COMMENT: ~[\n\r]+;
+```
+
+@[CSVParser.g4](CSVParser.g4)
+
+```g4
+parser grammar CSVParser;
+
+options { tokenVocab = CSVLexer; }
+
+file: header (data | meta)+ trailer EOF;
+
+header: HEADER timestamp NL;
+timestamp: TS;
+
+trailer: TRAILER X d_records X m_records NL;
+d_records: NUMBER;
+m_records: NUMBER;
+
+data: DATA (X (value | na))+ NL;
+value: TEXT;
+na: ;
+
+meta: META comment NL;
+comment: COMMENT;
+```
+
+```
+./run -tree csv_test.csv 
+(file
+  (header H; (timestamp 2019/1/10) \n)
+  (meta # (comment  this is comment) \n)
+  (data D ; (value Value1) ; na ; (value Value3) \n)
+  (meta # (comment  this is comment 2) \n) (data D ; (value Value1) \n)
+  (trailer T ; (d_records 6) ; (m_records 2) \n)
+<EOF>)
+```
