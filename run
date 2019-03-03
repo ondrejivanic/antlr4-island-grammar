@@ -4,8 +4,8 @@ export CLASSPATH=".:.antlr/antlr-4.7.2-complete.jar:$CLASSPATH"
 
 rm -f CSV*java CSV*class *.tokens *.interp
 
-java org.antlr.v4.Tool CSVLexer.g4 
-java org.antlr.v4.Tool CSVParser.g4 
-javac CSV*.java
-java org.antlr.v4.gui.TestRig CSV file $*
+java org.antlr.v4.Tool CSVLexer.g4 \
+	&& java org.antlr.v4.Tool CSVParser.g4 \
+	&& javac CSV*.java \
+	&& java org.antlr.v4.gui.TestRig CSV file $*
 
